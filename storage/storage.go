@@ -1,18 +1,12 @@
 package storage
 
-import "article/models"
+import "blockpost/genprotos/author"
 
 type StorageI interface {
-	AddArticle(id string, entity models.CreateArticleModel) error
-	GetArticleByID(id string) (models.PackedArticleModel, error)
-	GetArticleList(offset, limit int, search string) (resp []models.Article, err error)
-	UpdateArticle(entered models.UpdateArticleModel) error
-	DeleteArticle(id string) error
-
-	AddAuthor(id string, entity models.CreateAuthorModel) error
-	GetAuthorByID(id string) (models.AuthorWithArticles, error)
-	GetArticlesByAuthorID(id string) (resp []models.Article, err error)
-	GetAuthorList(offset, limit int, search string) (resp []models.Author, err error)
-	UpdateAuthor(req models.UpdateAuthorModel) error
-	DeleteAuthor(id string) error
+	AddAuthor(*author.CreateAuthorReq) (*author.CreateAuthorRes, error)
+	GetAuthorByID(req *author.Id) (*author.GetAuthorByIdRes, error)
+	GetArticlesByAuthorID(req *author.Id) (resp *author.GetArticles, err error)
+	GetAuthorList(req *author.GetAuthorListReq) (resp *author.GetAuthors, err error)
+	UpdateAuthor(req *author.UpdateAuthorReq) error
+	DeleteAuthor(id *author.Id) error
 }

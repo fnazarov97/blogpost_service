@@ -25,7 +25,7 @@ type AuthorServicesClient interface {
 	AddAuthor(ctx context.Context, in *CreateAuthorReq, opts ...grpc.CallOption) (*CreateAuthorRes, error)
 	GetAuthorByID(ctx context.Context, in *Id, opts ...grpc.CallOption) (*GetAuthorByIdRes, error)
 	GetArticlesByAuthorID(ctx context.Context, in *Id, opts ...grpc.CallOption) (*GetArticles, error)
-	GetAuthorList(ctx context.Context, in *GetAuthorListReq, opts ...grpc.CallOption) (*GetArticles, error)
+	GetAuthorList(ctx context.Context, in *GetAuthorListReq, opts ...grpc.CallOption) (*GetAuthors, error)
 	UpdateAuthor(ctx context.Context, in *UpdateAuthorReq, opts ...grpc.CallOption) (*CreateAuthorRes, error)
 	DeleteAuthor(ctx context.Context, in *Id, opts ...grpc.CallOption) (*CreateAuthorRes, error)
 }
@@ -65,8 +65,8 @@ func (c *authorServicesClient) GetArticlesByAuthorID(ctx context.Context, in *Id
 	return out, nil
 }
 
-func (c *authorServicesClient) GetAuthorList(ctx context.Context, in *GetAuthorListReq, opts ...grpc.CallOption) (*GetArticles, error) {
-	out := new(GetArticles)
+func (c *authorServicesClient) GetAuthorList(ctx context.Context, in *GetAuthorListReq, opts ...grpc.CallOption) (*GetAuthors, error) {
+	out := new(GetAuthors)
 	err := c.cc.Invoke(ctx, "/AuthorServices/GetAuthorList", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -99,7 +99,7 @@ type AuthorServicesServer interface {
 	AddAuthor(context.Context, *CreateAuthorReq) (*CreateAuthorRes, error)
 	GetAuthorByID(context.Context, *Id) (*GetAuthorByIdRes, error)
 	GetArticlesByAuthorID(context.Context, *Id) (*GetArticles, error)
-	GetAuthorList(context.Context, *GetAuthorListReq) (*GetArticles, error)
+	GetAuthorList(context.Context, *GetAuthorListReq) (*GetAuthors, error)
 	UpdateAuthor(context.Context, *UpdateAuthorReq) (*CreateAuthorRes, error)
 	DeleteAuthor(context.Context, *Id) (*CreateAuthorRes, error)
 	mustEmbedUnimplementedAuthorServicesServer()
@@ -118,7 +118,7 @@ func (UnimplementedAuthorServicesServer) GetAuthorByID(context.Context, *Id) (*G
 func (UnimplementedAuthorServicesServer) GetArticlesByAuthorID(context.Context, *Id) (*GetArticles, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetArticlesByAuthorID not implemented")
 }
-func (UnimplementedAuthorServicesServer) GetAuthorList(context.Context, *GetAuthorListReq) (*GetArticles, error) {
+func (UnimplementedAuthorServicesServer) GetAuthorList(context.Context, *GetAuthorListReq) (*GetAuthors, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAuthorList not implemented")
 }
 func (UnimplementedAuthorServicesServer) UpdateAuthor(context.Context, *UpdateAuthorReq) (*CreateAuthorRes, error) {

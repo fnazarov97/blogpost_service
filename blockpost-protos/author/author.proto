@@ -7,7 +7,7 @@ service AuthorServices {
     rpc AddAuthor (CreateAuthorReq) returns (CreateAuthorRes) {}
     rpc GetAuthorByID (Id) returns (GetAuthorByIdRes) {}
     rpc GetArticlesByAuthorID (Id) returns (GetArticles) {}
-    rpc GetAuthorList (GetAuthorListReq) returns (GetArticles) {}
+    rpc GetAuthorList (GetAuthorListReq) returns (GetAuthors) {}
     rpc UpdateAuthor (UpdateAuthorReq) returns (CreateAuthorRes) {}
     rpc DeleteAuthor (Id) returns (CreateAuthorRes) {} 
 }
@@ -16,11 +16,25 @@ message Id {
     string Id = 1;
 }
 message CreateAuthorReq {
-    Id ID = 1 ;
+    string ID = 1 ;
     string Fullname = 2;
 }
 
 message CreateAuthorRes {
+}
+
+message Post {
+    string Title = 1;
+    string Body = 2;
+}
+
+message Article {
+    string Id = 1;
+    Post Content = 2;   
+    string AuthorId = 3;
+    string Created_at = 4;
+    string Updated_at = 5;
+    string Deleted_at = 6;
 }
 
 message GetAuthorByIdRes {
@@ -32,18 +46,18 @@ message GetAuthorByIdRes {
 	string Deleted_at = 6;
 }
 
-message Post {
-    string Title = 1;
-	string Body = 2;
-}
-message Article {
+message Author {
     string Id = 1;
-	Post Content = 2;   
-	string AuthorId = 3;
-	string Created_at = 4;
-	string Updated_at = 5;
-	string Deleted_at = 6;
+    string Fullname = 2;
+    string Created_at = 3;
+	string Updated_at = 4;
+	string Deleted_at = 5;
 }
+
+message GetAuthors {
+    repeated Author Authors = 1;
+}
+
 
 message GetArticles{
     repeated Article Articles = 1;

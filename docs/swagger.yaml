@@ -281,7 +281,7 @@ paths:
       summary: get article by id
       tags:
       - articles
-  /v2/author:
+  /v2blogpost:
     get:
       consumes:
       - application/json
@@ -376,7 +376,7 @@ paths:
       summary: update author
       tags:
       - authors
-  /v2/author/{id}:
+  /v2blogpost/{id}:
     delete:
       consumes:
       - application/json

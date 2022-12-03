@@ -281,7 +281,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/v2/author": {
+        "/v2blogpost": {
             "get": {
                 "description": "get author",
                 "consumes": [
@@ -439,7 +439,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/v2/author/{id}": {
+        "/v2blogpost/{id}": {
             "get": {
                 "description": "get an author by id",
                 "consumes": [
