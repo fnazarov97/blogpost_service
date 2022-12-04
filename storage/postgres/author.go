@@ -4,17 +4,24 @@ import (
 	"blockpost/genprotos/author"
 	"database/sql"
 	"errors"
-	"fmt"
 )
 
 // AddAuthor ...
 func (p Postgres) AddAuthor(req *author.CreateAuthorReq) (res *author.CreateAuthorRes, err error) {
-	fmt.Printf("%v %v", req.Fullname, req.ID)
 	_, err = p.DB.Exec(`Insert into author(id, fullname, created_at) 
 							VALUES($1,$2,now())`, req.ID, req.Fullname)
 	if err != nil {
 		return res, err
 	}
+	res = &author.CreateAuthorRes{}
+	// id := &req.ID
+	// i := &author.Id{
+	// 	Id:*id,
+	// }
+	// r, _ := p.GetAuthorByID(i)
+	// res = &author.CreateAuthorRes{
+
+	// }
 	return res, nil
 }
 
