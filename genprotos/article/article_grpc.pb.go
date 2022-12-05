@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ArticleServicesClient interface {
-	AddArticle(ctx context.Context, in *AddArticleReq, opts ...grpc.CallOption) (*Article, error)
+	AddArticle(ctx context.Context, in *AddArticleReq, opts ...grpc.CallOption) (*AddArticleRes, error)
 	GetArticleByID(ctx context.Context, in *GetArticleByIdReq, opts ...grpc.CallOption) (*GetArticleByIdRes, error)
 	GetArticleList(ctx context.Context, in *GetArticleListReq, opts ...grpc.CallOption) (*GetArticleListRes, error)
 	UpdateArticle(ctx context.Context, in *UpdateArticleReq, opts ...grpc.CallOption) (*UpdateArticleRes, error)
@@ -37,8 +37,8 @@ func NewArticleServicesClient(cc grpc.ClientConnInterface) ArticleServicesClient
 	return &articleServicesClient{cc}
 }
 
-func (c *articleServicesClient) AddArticle(ctx context.Context, in *AddArticleReq, opts ...grpc.CallOption) (*Article, error) {
-	out := new(Article)
+func (c *articleServicesClient) AddArticle(ctx context.Context, in *AddArticleReq, opts ...grpc.CallOption) (*AddArticleRes, error) {
+	out := new(AddArticleRes)
 	err := c.cc.Invoke(ctx, "/ArticleServices/AddArticle", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -86,7 +86,7 @@ func (c *articleServicesClient) DeleteArticle(ctx context.Context, in *DeleteArt
 // All implementations must embed UnimplementedArticleServicesServer
 // for forward compatibility
 type ArticleServicesServer interface {
-	AddArticle(context.Context, *AddArticleReq) (*Article, error)
+	AddArticle(context.Context, *AddArticleReq) (*AddArticleRes, error)
 	GetArticleByID(context.Context, *GetArticleByIdReq) (*GetArticleByIdRes, error)
 	GetArticleList(context.Context, *GetArticleListReq) (*GetArticleListRes, error)
 	UpdateArticle(context.Context, *UpdateArticleReq) (*UpdateArticleRes, error)
@@ -98,7 +98,7 @@ type ArticleServicesServer interface {
 type UnimplementedArticleServicesServer struct {
 }
 
-func (UnimplementedArticleServicesServer) AddArticle(context.Context, *AddArticleReq) (*Article, error) {
+func (UnimplementedArticleServicesServer) AddArticle(context.Context, *AddArticleReq) (*AddArticleRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddArticle not implemented")
 }
 func (UnimplementedArticleServicesServer) GetArticleByID(context.Context, *GetArticleByIdReq) (*GetArticleByIdRes, error) {

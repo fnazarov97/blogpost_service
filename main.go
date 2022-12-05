@@ -2,7 +2,9 @@ package main
 
 import (
 	"blockpost/config"
+	"blockpost/genprotos/article"
 	"blockpost/genprotos/author"
+	aService "blockpost/services/article"
 	dService "blockpost/services/author"
 	"blockpost/storage"
 	"blockpost/storage/postgres"
@@ -42,6 +44,11 @@ func main() {
 	}
 	s := grpc.NewServer()
 	author.RegisterAuthorServicesServer(s, c)
+
+	c1 := &aService.ArticleService{
+		Stg: inter,
+	}
+	article.RegisterArticleServicesServer(s, c1)
 	reflection.Register(s)
 
 	if err := s.Serve(listener); err != nil {

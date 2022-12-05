@@ -4,7 +4,7 @@ option go_package = "./article";
 
 // The service definition.
 service ArticleServices {
-    rpc AddArticle      (AddArticleReq)     returns (Article) {}
+    rpc AddArticle      (AddArticleReq)     returns (AddArticleRes) {}
     rpc GetArticleByID  (GetArticleByIdReq) returns (GetArticleByIdRes) {}
     rpc GetArticleList  (GetArticleListReq) returns (GetArticleListRes) {}
     rpc UpdateArticle   (UpdateArticleReq)  returns (UpdateArticleRes) {}
@@ -12,16 +12,19 @@ service ArticleServices {
 }
 
 message AddArticleReq {
+	message Post {
+		string Title = 1;
+		string Body = 2;
+	}
     string authorId = 1;
 	Post Content = 2; 
 }
 
-message Post {
-    string Title = 1;
-	string Body = 2;
-}
-
-message Article {
+message AddArticleRes {
+	message Post {
+		string Title = 1;
+		string Body = 2;
+	}
     string Id = 1;
 	Post Content = 2;   
 	string AuthorId = 3;
@@ -42,6 +45,10 @@ message GetArticleByIdRes {
 		string Updated_at = 4;
 		string Deleted_at = 5;
 	}
+	message Post {
+		string Title = 1;
+		string Body = 2;
+	}
 	string Id = 1;
 	Post Content = 2;   
 	Author Authori = 3;
@@ -57,10 +64,14 @@ message GetArticleListReq {
 }
 
 message GetArticleListRes {
-    repeated Article Articles = 1;
+    repeated AddArticleRes Articles = 1;
 }
 
 message UpdateArticleReq {
+	message Post {
+		string Title = 1;
+		string Body = 2;
+	}
     string Id = 1;
     Post Content = 2;
 }
@@ -72,6 +83,10 @@ message UpdateArticleRes {
 		string Created_at = 3;
 		string Updated_at = 4;
 		string Deleted_at = 5;
+	}
+	message Post {
+		string Title = 1;
+		string Body = 2;
 	}
     string Id = 1;
 	Post Content = 2;   
@@ -86,6 +101,10 @@ message DeleteArticleReq {
 }
 
 message DeleteArticleRes {
+	message Post {
+		string Title = 1;
+		string Body = 2;
+	}
     string Id = 1;
 	Post Content = 2;   
 	string AuthorId = 3;

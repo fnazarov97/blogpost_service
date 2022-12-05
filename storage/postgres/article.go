@@ -18,7 +18,7 @@ func (p Postgres) AddArticle(id string, req *article.AddArticleReq) error {
 	}
 
 	if req.Content == nil {
-		req.Content = &article.Post{}
+		req.Content = &article.AddArticleReq_Post{}
 	}
 	_, err = p.DB.Exec(`Insert into article(id, title, body, author_id, created_at) 
 						 VALUES($1, $2, $3, $4, now())
@@ -32,7 +32,7 @@ func (p Postgres) AddArticle(id string, req *article.AddArticleReq) error {
 // GetArticleByID ...
 func (p Postgres) GetArticleByID(id string) (*article.GetArticleByIdRes, error) {
 	res := &article.GetArticleByIdRes{
-		Content: &article.Post{},
+		Content: &article.GetArticleByIdRes_Post{},
 		Authori: &article.GetArticleByIdRes_Author{},
 	}
 	var deletedAt *time.Time
@@ -82,7 +82,7 @@ func (p Postgres) GetArticleByID(id string) (*article.GetArticleByIdRes, error) 
 // GetArticleList ...
 func (p Postgres) GetArticleList(offset, limit int, search string) (*article.GetArticleListRes, error) {
 	resp := &article.GetArticleListRes{
-		Articles: make([]*article.Article, 0),
+		Articles: make([]*article.AddArticleRes, 0),
 	}
 
 	rows, err := p.DB.Queryx(`SELECT
@@ -101,8 +101,8 @@ func (p Postgres) GetArticleList(offset, limit int, search string) (*article.Get
 	}
 
 	for rows.Next() {
-		a := &article.Article{
-			Content: &article.Post{},
+		a := &article.AddArticleRes{
+			Content: &article.AddArticleRes_Post{},
 		}
 
 		var updatedAt *string
@@ -132,7 +132,7 @@ func (p Postgres) GetArticleList(offset, limit int, search string) (*article.Get
 // UpdateArticle ...
 func (p Postgres) UpdateArticle(entity *article.UpdateArticleReq) error {
 	if entity.Content == nil {
-		entity.Content = &article.Post{}
+		entity.Content = &article.UpdateArticleReq_Post{}
 	}
 	res, err := p.DB.NamedExec("UPDATE article  SET title=:t, body=:b, updated_at=now() WHERE deleted_at IS NULL AND id=:id", map[string]interface{}{
 		"id": entity.Id,

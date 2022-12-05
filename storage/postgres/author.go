@@ -14,14 +14,6 @@ func (p Postgres) AddAuthor(req *author.CreateAuthorReq) (res *author.CreateAuth
 		return res, err
 	}
 	res = &author.CreateAuthorRes{}
-	// id := &req.ID
-	// i := &author.Id{
-	// 	Id:*id,
-	// }
-	// r, _ := p.GetAuthorByID(i)
-	// res = &author.CreateAuthorRes{
-
-	// }
 	return res, nil
 }
 
