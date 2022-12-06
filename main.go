@@ -34,7 +34,7 @@ func main() {
 
 	println("gRPC server running port:9000 with tcp protocol!")
 
-	listener, err := net.Listen("tcp", ":9000")
+	listener, err := net.Listen("tcp", conf.GRPCPort)
 	if err != nil {
 		panic(err)
 	}
