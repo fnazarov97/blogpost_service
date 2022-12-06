@@ -4,6 +4,7 @@ import (
 	"blockpost/genprotos/article"
 	"blockpost/storage"
 	"context"
+	"time"
 
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
@@ -16,7 +17,7 @@ type ArticleService struct {
 	article.UnimplementedArticleServicesServer
 }
 
-// ArticleService ...
+// AddArticle ...
 func (a *ArticleService) AddArticle(c context.Context, req *article.AddArticleReq) (*article.AddArticleRes, error) {
 	id := uuid.New()
 	err := a.Stg.AddArticle(id.String(), req)
@@ -36,11 +37,61 @@ func (a *ArticleService) AddArticle(c context.Context, req *article.AddArticleRe
 	}, nil
 }
 
-// ArticleService ...
+// GetArticleByID ...
 func (a *ArticleService) GetArticleByID(c context.Context, req *article.GetArticleByIdReq) (*article.GetArticleByIdRes, error) {
 	res, err := a.Stg.GetArticleByID(req.Id)
 	if err != nil {
 		return nil, status.Errorf(codes.NotFound, "a.Stg.GetArticleByID: %s", err.Error())
 	}
 	return res, nil
+}
+
+// GetArticleList ...
+func (a *ArticleService) GetArticleList(c context.Context, req *article.GetArticleListReq) (*article.GetArticleListRes, error) {
+	res, err := a.Stg.GetArticleList(int(req.Offset), int(req.Limit), req.Search)
+	if err != nil {
+		return nil, status.Errorf(codes.NotFound, "a.Stg.GetArticleList: %s", err.Error())
+	}
+	return res, nil
+}
+
+// UpdateArticle ...
+func (a *ArticleService) UpdateArticle(c context.Context, req *article.UpdateArticleReq) (*article.UpdateArticleRes, error) {
+	err := a.Stg.UpdateArticle(req)
+	if err != nil {
+		return nil, status.Errorf(codes.NotFound, "a.Stg.UpdateArticle: %s", err.Error())
+	}
+	res, e := a.Stg.GetArticleByID(req.Id)
+	if e != nil {
+		return nil, status.Errorf(codes.NotFound, "a.Stg.UpdateArticle: %s", e.Error())
+	}
+	return &article.UpdateArticleRes{
+		Id:        res.Id,
+		Content:   (*article.UpdateArticleRes_Post)(req.Content),
+		Authori:   (*article.UpdateArticleRes_Author)(res.Authori),
+		CreatedAt: res.CreatedAt,
+		UpdatedAt: res.UpdatedAt,
+		DeletedAt: res.DeletedAt,
+	}, nil
+}
+
+// DeleteArticle ...
+func (a *ArticleService) DeleteArticle(c context.Context, req *article.DeleteArticleReq) (*article.DeleteArticleRes, error) {
+	res, e := a.Stg.GetArticleByID(req.Id)
+	if e != nil {
+		return nil, status.Errorf(codes.NotFound, "a.Stg.UpdateArticle: %s", e.Error())
+	}
+	err := a.Stg.DeleteArticle(req.Id)
+	if err != nil {
+		return nil, status.Errorf(codes.NotFound, "a.Stg.DeleteArticle: %s", err.Error())
+	}
+
+	return &article.DeleteArticleRes{
+		Id:        res.Id,
+		Content:   (*article.DeleteArticleRes_Post)(res.Content),
+		AuthorId:  res.Authori.Id,
+		CreatedAt: res.CreatedAt,
+		UpdatedAt: res.UpdatedAt,
+		DeletedAt: time.Now().Format(time.UnixDate),
+	}, nil
 }

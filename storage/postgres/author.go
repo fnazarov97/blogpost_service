@@ -7,7 +7,8 @@ import (
 )
 
 // AddAuthor ...
-func (p Postgres) AddAuthor(req *author.CreateAuthorReq) (res *author.CreateAuthorRes, err error) {
+func (p Postgres) AddAuthor(id string, req *author.CreateAuthorReq) (res *author.CreateAuthorRes, err error) {
+	req.ID = id
 	_, err = p.DB.Exec(`Insert into author(id, fullname, created_at) 
 							VALUES($1,$2,now())`, req.ID, req.Fullname)
 	if err != nil {

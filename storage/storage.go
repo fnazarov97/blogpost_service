@@ -6,7 +6,7 @@ import (
 )
 
 type StorageI interface {
-	AddAuthor(*author.CreateAuthorReq) (*author.CreateAuthorRes, error)
+	AddAuthor(string, *author.CreateAuthorReq) (*author.CreateAuthorRes, error)
 	GetAuthorByID(req *author.Id) (*author.GetAuthorByIdRes, error)
 	GetArticlesByAuthorID(req *author.Id) (resp *author.GetArticles, err error)
 	GetAuthorList(req *author.GetAuthorListReq) (resp *author.GetAuthors, err error)

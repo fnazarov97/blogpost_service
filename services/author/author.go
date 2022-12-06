@@ -4,6 +4,8 @@ import (
 	"blockpost/genprotos/author"
 	"blockpost/storage"
 	"context"
+
+	"github.com/google/uuid"
 )
 
 // AuthorService is a struct that implements the server interface
@@ -14,7 +16,8 @@ type AuthorService struct {
 
 // AuthorService ...
 func (a *AuthorService) AddAuthor(ctx context.Context, req *author.CreateAuthorReq) (*author.CreateAuthorRes, error) {
-	res, err := a.Stg.AddAuthor(req)
+	id := uuid.New()
+	res, err := a.Stg.AddAuthor(id.String(), req)
 	if err != nil {
 		return res, err
 	}
